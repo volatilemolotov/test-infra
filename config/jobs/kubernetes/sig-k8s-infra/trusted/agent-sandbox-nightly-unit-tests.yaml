@@ -1,0 +1,32 @@
+periodics:
+- name: periodic-agent-sandbox-nightly-unit-tests
+  cluster: k8s-infra-prow-build-trusted
+  cron: "0 6 * * *"
+  decorate: true
+  annotations:
+    testgrid-dashboards: sig-apps-agent-sandbox
+    testgrid-tab-name: periodic-nightly-unit-tests
+    description: Reruns kubernetes-sigs/agent-sandbox unit-test-only suites nightly against main and files GitHub issues on failure, reusing the k8s-triage-robot-github-token secret already present in this cluster.
+  extra_refs:
+  - org: kubernetes-sigs
+    repo: agent-sandbox
+    base_ref: main
+  spec:
+    containers:
+    - image: us-central1-docker.pkg.dev/k8s-staging-test-infra/images/kubekins-e2e:v20260622-537e33cc05-master
+      command:
+      - dev/ci/periodics/test-nightly-unit-tests
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github-token
+      resources:
+        requests:
+          cpu: 2
+          memory: 4Gi
+        limits:
+          cpu: 2
+          memory: 4Gi
+    volumes:
+    - name: github-token
+      secret:
+        secretName: k8s-triage-robot-github-token
