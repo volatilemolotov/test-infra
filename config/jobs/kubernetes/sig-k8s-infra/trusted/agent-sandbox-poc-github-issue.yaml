@@ -6,7 +6,7 @@ periodics:
   annotations:
     testgrid-dashboards: sig-apps-agent-sandbox
     testgrid-tab-name: periodic-poc-github-issue
-    description: PoC verifying that a periodic Prow job can file/update a GitHub issue via the agent-sandbox-github-issue-token secret. Requires SIG K8s Infra to provision that secret in k8s-infra-prow-build-trusted (via Terraform/ExternalSecret in kubernetes/k8s.io, same as k8s-triage-robot-github-token) with a GitHub token scoped to file issues on kubernetes-sigs/agent-sandbox. Delete once periodic-agent-sandbox-nightly-unit-tests has been observed filing issues successfully.
+    description: PoC verifying that a periodic Prow job can file/update a GitHub issue via the k8s-triage-robot-github-token secret. Delete once periodic-agent-sandbox-nightly-unit-tests has been observed filing issues successfully.
   extra_refs:
   - org: kubernetes-sigs
     repo: agent-sandbox
@@ -29,4 +29,4 @@ periodics:
     volumes:
     - name: github-token
       secret:
-        secretName: agent-sandbox-github-issue-token
+        secretName: k8s-triage-robot-github-token
